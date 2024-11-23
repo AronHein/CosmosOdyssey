@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosOdyssey", "CosmosOdyssey\CosmosOdyssey.csproj", "{57771877-922B-4FA6-804B-BC6ED8A463FC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{57771877-922B-4FA6-804B-BC6ED8A463FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57771877-922B-4FA6-804B-BC6ED8A463FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57771877-922B-4FA6-804B-BC6ED8A463FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57771877-922B-4FA6-804B-BC6ED8A463FC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
