@@ -1,8 +1,6 @@
 ﻿using System.Text.Json;
+using DAL;
 using Models;
-
-namespace DAL;
-
 
 public class TravelPriceFetcher
 {
@@ -47,5 +45,16 @@ public class TravelPriceFetcher
         {
             throw new Exception("An unexpected error occurred while fetching pricelist: " + e);
         }
+    }
+    public async Task SavePricelistToDb(Pricelist pricelist)
+    {       
+        PricelistJson pricelistJson = new PricelistJson
+        {
+            ValidUntil = pricelist.ValidUntil,
+            Json = JsonSerializer.Serialize(pricelist)
+        };
+        Console.WriteLine(pricelistJson.Id);
+        _context.PricelistJson.Add(pricelistJson);
+        await _context.SaveChangesAsync();
     }
 }
