@@ -1,5 +1,8 @@
 ﻿namespace Models;
 
-public class PriceList
+public class Pricelist
 {
+    public Guid Id { get; set; }
+    public DateTime ValidUntil { get; set; }
+    public List<Leg> Legs { get; set; }
 }
