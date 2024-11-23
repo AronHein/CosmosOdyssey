@@ -6,10 +6,17 @@ namespace DAL;
 
 public class TravelPriceFetcher
 {
-    private readonly HttpClient _client = new HttpClient();
+    private readonly HttpClient _client;
+    private readonly AppDbContext _context;
     private const string ApiUrl = "https://cosmos-odyssey.azurewebsites.net/api/v1.0/TravelPrices";
+    
+    public TravelPriceFetcher(HttpClient client, AppDbContext context)
+    {
+        _client = client;
+        _context = context;
+    }
 
-    public async Task<Pricelist> GetTravelPrices()
+    public async Task<Pricelist> GetPricelist()
     {
         try
         {
