@@ -53,8 +53,55 @@ public class TravelPriceFetcher
             ValidUntil = pricelist.ValidUntil,
             Json = JsonSerializer.Serialize(pricelist)
         };
-        Console.WriteLine(pricelistJson.Id);
         _context.PricelistJson.Add(pricelistJson);
         await _context.SaveChangesAsync();
+    }
+    
+    // Depth-first search algorithm to find all possible routes from one location to another.
+    public List<List<Leg>> FindAllRoutes(Pricelist pricelist, string from, string to)
+    {
+        var routes = new List<List<Leg>>();
+        var legs = pricelist.Legs;
+
+        void Search(List<Leg> currentRoute, string currentLocation)
+        {
+            if (currentLocation == to)
+            {
+                routes.Add(new List<Leg>(currentRoute));
+                return;
+            }
+            
+            foreach (var leg in legs)
+            {
+                
+                if (leg.RouteInfo.From.Name == currentLocation && 
+                    // Check if the leg hasn't already been used in the route.
+                    !currentRoute.Any(l => l.RouteInfo.From.Name == leg.RouteInfo.From.Name))
+                {
+                    currentRoute.Add(leg);
+                    Search(currentRoute, leg.RouteInfo.To.Name);
+                    currentRoute.RemoveAt(currentRoute.Count - 1); // Backtrack
+                }
+            }
+        }
+        
+        Search(new List<Leg>(), from);
+
+        return routes;
+    }
+    
+    public List<Dictionary<string, string>> GetRouteNamesFromRoutesList(List<List<Leg>> routes)
+    {
+        var routeNames = new List<Dictionary<string, string>>();
+        foreach (var route in routes)
+        {
+            var routeName = new Dictionary<string, string>();
+            foreach (var leg in route)
+            {
+                routeName.Add(leg.RouteInfo.From.Name, leg.RouteInfo.To.Name);
+            }
+            routeNames.Add(routeName);
+        }
+        return routeNames;
     }
 }

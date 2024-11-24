@@ -22,5 +22,18 @@ using (var scope = serviceProvider.CreateScope())
     
     var savedPricelist = context.PricelistJson
         .FirstOrDefault(p => p.ValidUntil == pricelist.ValidUntil);
-    Console.WriteLine("Saved " + savedPricelist.Id);
+    //Console.WriteLine("Saved " + savedPricelist.Id);
+   
+    var routes = fetcher.FindAllRoutes(pricelist, "Uranus", "Earth");
+    Console.WriteLine(routes.Count);
+    var routeNames = fetcher.GetRouteNamesFromRoutesList(routes);
+    foreach (var route in routeNames)
+    {
+        foreach (var kvp in route)
+        {
+            Console.WriteLine($"from: {kvp.Key} to: {kvp.Value}");
+        }
+
+        Console.WriteLine("---------------------");
+    }
 }
