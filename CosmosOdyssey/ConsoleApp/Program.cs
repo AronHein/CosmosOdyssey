@@ -10,4 +10,5 @@ var serviceProvider = serviceCollection.BuildServiceProvider();
 var pricelistService = serviceProvider.GetService<PricelistService>();
 
 var json = await pricelistService.FetchPricelistJson();
-Console.WriteLine(json);
+var pricelist = pricelistService.DeserializePricelistJson(json);
+Console.WriteLine(pricelist.Legs[0].Providers[0].Price);

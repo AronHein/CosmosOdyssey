@@ -1,4 +1,7 @@
-﻿namespace DAL;
+﻿using System.Text.Json;
+using Models;
+
+namespace DAL;
 
 public class PricelistService
 {
@@ -23,5 +26,20 @@ public class PricelistService
         {
             throw new Exception("Error occurred while trying to fetch data from the API: " + e);
         }
+    }
+    
+    public Pricelist DeserializePricelistJson(string json)
+    {
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+        var pricelist = JsonSerializer.Deserialize<Pricelist>(json, options);
+        
+        if (pricelist == null)
+        {
+            throw new JsonException("Failed to deserialize the API response into a pricelist object.");
+        }
+        return pricelist;
     }
 }
