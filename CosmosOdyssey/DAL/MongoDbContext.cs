@@ -14,4 +14,5 @@ public class MongoDbContext
     }
 
     public IMongoCollection<Pricelist> Pricelists => _database.GetCollection<Pricelist>("Pricelists");
+    public IMongoCollection<Reservation> Reservations => _database.GetCollection<Reservation>("Reservations");
 }
