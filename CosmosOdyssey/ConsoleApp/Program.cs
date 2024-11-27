@@ -31,8 +31,8 @@ var pricelistService = serviceProvider.GetService<PricelistService>();
 var json = await pricelistService.FetchPricelistJson();
 var pricelist = pricelistService.DeserializePricelistJson(json);
 Console.WriteLine(pricelist.Legs[0].Providers[0].Price);
-await pricelistService.AddPricelistAsync(pricelist);
-var pricelists = await pricelistService.GetPricelistsAsync();
+await pricelistService.AddPricelist(pricelist);
+var pricelists = await pricelistService.GetPricelists();
 Console.WriteLine(pricelists.First().Legs.First().Providers.First().Price);
 var reservation = new Reservation
 {

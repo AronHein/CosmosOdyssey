@@ -46,12 +46,12 @@ public class PricelistService
         return pricelist;
     }
     
-    public async Task AddPricelistAsync(Pricelist pricelist)
+    public async Task AddPricelist(Pricelist pricelist)
     {
         await _context.Pricelists.InsertOneAsync(pricelist);
     }
 
-    public async Task<List<Pricelist>> GetPricelistsAsync()
+    public async Task<List<Pricelist>> GetPricelists()
     {
         return await _context.Pricelists.Find(_ => true).ToListAsync();
     }
