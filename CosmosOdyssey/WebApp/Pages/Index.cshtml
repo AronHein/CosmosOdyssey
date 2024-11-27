@@ -3,3 +3,25 @@
 @{
     ViewData["Title"] = "Home page";
 }
+
+<form method="post">
+    <div class="form-group">
+        <label for="from">From</label>
+        <select id="from" name="From" class="form-control">
+            @foreach (var location in Model.Locations)
+            {
+                <option value="@location">@location</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="to">To</label>
+        <select id="to" name="To" class="form-control">
+            @foreach (var location in Model.Locations)
+            {
+                <option value="@location">@location</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

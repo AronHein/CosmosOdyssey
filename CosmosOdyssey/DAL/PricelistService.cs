@@ -103,4 +103,12 @@ public class PricelistService
         }
         return routeNames;
     }
+
+    public async Task<Pricelist> GetLatestPricelist()
+    {
+        return await _context.Pricelists
+            .Find(_ => true)
+            .SortByDescending(p => p.ValidUntil)
+            .FirstOrDefaultAsync();
+    }
 }
