@@ -1,0 +1,48 @@
+@page
+@model WebApp.Pages.ReservationModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Routes</title>
+</head>
+<body>
+<h1>Routes from @Model.From to @Model.To</h1>
+<p>Price list valid until: @Model.Pricelist.ValidUntil</p>
+<div>
+    @if (Model.Routes.Count > 0)
+    {
+        <ul>
+            @foreach (var route in Model.Routes)
+            {
+                <li>
+                    <p>Route:</p>
+                    <ul>
+                        @foreach (var leg in route)
+                        {
+                            <li>
+                                From: @leg.RouteInfo.From.Name, To: @leg.RouteInfo.To.Name, Distance: @leg.RouteInfo.Distance km
+                                <ul>
+                                    @foreach (var provider in leg.Providers)
+                                    {
+                                        <li>
+                                            Provider: @provider.Company.Name, Price: @provider.Price, 
+                                            Flight Start: @provider.FlightStart, Flight End: @provider.FlightEnd, 
+                                            Duration: @(provider.FlightEnd - provider.FlightStart)
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No routes found.</p>
+    }
+</div>
+</body>
+</html>
