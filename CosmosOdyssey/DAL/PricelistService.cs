@@ -66,7 +66,10 @@ public class PricelistService
         {
             if (currentLocation == to)
             {
-                routes.Add(new List<Leg>(currentRoute));
+                if (currentRoute.Count > 0)
+                {
+                    routes.Add(new List<Leg>(currentRoute));
+                }
                 return;
             }
             

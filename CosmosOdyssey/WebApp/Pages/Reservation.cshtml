@@ -26,8 +26,8 @@
                                     @foreach (var provider in leg.Providers)
                                     {
                                         <li>
-                                            Provider: @provider.Company.Name, Price: @provider.Price, 
-                                            Flight Start: @provider.FlightStart, Flight End: @provider.FlightEnd, 
+                                            Provider: @provider.Company.Name, Price: @provider.Price,
+                                            Flight Start: @provider.FlightStart, Flight End: @provider.FlightEnd,
                                             Duration: @(provider.FlightEnd - provider.FlightStart)
                                         </li>
                                     }
