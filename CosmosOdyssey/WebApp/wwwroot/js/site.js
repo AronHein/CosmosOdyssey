@@ -1,4 +1,12 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function toggleCard(cardId, indicatorId) {
+    const cardBody = document.getElementById(cardId);
+    const indicator = document.getElementById(indicatorId);
 
-// Write your JavaScript code.
+    cardBody.classList.toggle('active');
+
+    if (cardBody.classList.contains('active')) {
+        indicator.innerHTML = '<i class="fas fa-chevron-up"></i>';
+    } else {
+        indicator.innerHTML = '<i class="fas fa-chevron-down"></i>';
+    }
+}

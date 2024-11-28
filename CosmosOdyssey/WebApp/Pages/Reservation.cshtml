@@ -1,48 +1,82 @@
 @page
 @model WebApp.Pages.ReservationModel
 
-<!DOCTYPE html>
-<html>
 <head>
     <title>Routes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-<h1>Routes from @Model.From to @Model.To</h1>
-<p>Price list valid until: @Model.Pricelist.ValidUntil</p>
-<div>
-    @if (Model.Routes.Count > 0)
-    {
-        <ul>
-            @foreach (var route in Model.Routes)
-            {
-                <li>
-                    <p>Route:</p>
-                    <ul>
-                        @foreach (var leg in route)
-                        {
-                            <li>
-                                From: @leg.RouteInfo.From.Name, To: @leg.RouteInfo.To.Name, Distance: @leg.RouteInfo.Distance km
-                                <ul>
-                                    @foreach (var provider in leg.Providers)
-                                    {
-                                        <li>
-                                            Provider: @provider.Company.Name, Price: @provider.Price,
-                                            Flight Start: @provider.FlightStart, Flight End: @provider.FlightEnd,
-                                            Duration: @(provider.FlightEnd - provider.FlightStart)
-                                        </li>
-                                    }
-                                </ul>
-                            </li>
-                        }
-                    </ul>
-                </li>
-            }
-        </ul>
-    }
-    else
-    {
-        <p>No routes found.</p>
-    }
+<div class="container mt-5">
+    <h1>Routes from @Model.From to @Model.To</h1>
+    <p>Price list valid until: @Model.Pricelist.ValidUntil</p>
+
+    <form method="post">
+        <div class="mb-3">
+            <label for="FirstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="FirstName" name="FirstName" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="LastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="LastName" name="LastName" required>
+        </div>
+
+        @if (Model.Routes.Count > 0)
+        {
+            <div id="routesContainer">
+                @for (int routeIndex = 0; routeIndex < Model.Routes.Count; routeIndex++)
+                {
+                    var route = Model.Routes[routeIndex];
+                    var routeInfo = route.First().RouteInfo.From.Name;
+                    foreach (var leg in route)
+                    {
+                        routeInfo += " -> " + leg.RouteInfo.To.Name;
+                    }
+                    <div class="card" id="routeCard-@routeIndex">
+                        <div class="card-header" onclick="toggleCard('routeCardBody-@routeIndex', 'indicator-@routeIndex')">
+                            Route: @routeInfo
+                            <span class="collapse-indicator" id="indicator-@routeIndex">
+                                <i class="fas fa-chevron-down"></i>
+                            </span>
+                        </div>
+                        <div class="card-body" id="routeCardBody-@routeIndex">
+                            <ul class="list-group">
+                                @for (int legIndex = 0; legIndex < route.Count; legIndex++)
+                                {
+                                    var leg = route[legIndex];
+                                    var flightNumber = legIndex + 1;
+                                    <li class="list-group-item">
+                                        Flight @flightNumber: From @leg.RouteInfo.From.Name to @leg.RouteInfo.To.Name, Distance: @leg.RouteInfo.Distance km
+                                        <ul class="list-unstyled mt-2">
+                                            @foreach (var provider in leg.Providers)
+                                            {
+                                                <li>
+                                                    <input type="radio" name="SelectedProvider_@routeIndex-@legIndex" id="provider-@routeIndex-@legIndex-@provider.Company.Id" value="@provider.Company.Id" required>
+                                                    <label for="provider-@routeIndex-@legIndex-@provider.Company.Id">
+                                                        Provider: @provider.Company.Name, Price: @provider.Price<br />
+                                                        Flight Start: @provider.FlightStart, Flight End: @provider.FlightEnd<br />
+                                                        Duration: @(provider.FlightEnd - provider.FlightStart)
+                                                    </label>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                            </ul>
+                            <div class="mt-3">
+                                <button type="submit" class="btn btn-primary">Make Reservation</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p>No routes found for selected locations.</p>
+        }
+    </form>
 </div>
+
+<script src="~/js/site.js"></script>
 </body>
-</html>

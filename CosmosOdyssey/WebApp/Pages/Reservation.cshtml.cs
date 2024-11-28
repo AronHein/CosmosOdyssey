@@ -26,6 +26,9 @@ namespace WebApp.Pages
         [BindProperty]
         public List<List<Leg>> Routes { get; set; }
 
+        [BindProperty]
+        public string SelectedFlight { get; set; }
+
         public async Task OnGet()
         {
             if (!string.IsNullOrEmpty(From) && !string.IsNullOrEmpty(To))
@@ -33,6 +36,18 @@ namespace WebApp.Pages
                 Pricelist = await _pricelistService.GetLatestPricelist();
                 Routes = _pricelistService.FindAllRoutes(Pricelist, From, To);
             }
+        }
+
+        public IActionResult OnPost()
+        {
+            if (!string.IsNullOrEmpty(SelectedFlight))
+            {
+                var indices = SelectedFlight.Split('-').Select(int.Parse).ToArray();
+                var selectedLeg = Routes[indices[0]][indices[1]];
+                var selectedProvider = selectedLeg.Providers[indices[2]];
+            }
+
+            return Page();
         }
     }
 }

@@ -20,3 +20,33 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.card {
+  border: 1px solid #ddd;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+}
+
+.card-header {
+  background-color: #f7f7f7;
+  padding: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-body {
+  display: none;
+  padding: 1rem;
+  border-top: 1px solid #ddd;
+}
+
+.card-body.active {
+  display: block;
+}
+
+.collapse-indicator {
+  font-size: 1.2rem;
+}
