@@ -9,22 +9,29 @@
 <div class="container mt-5">
     <h1>Routes from @Model.From to @Model.To</h1>
     <p>Price list valid until: @Model.Pricelist.ValidUntil</p>
-    
-    <form method="get">
 
-        <input type="hidden" name="From" value="@Model.From" />
-        <input type="hidden" name="To" value="@Model.To" />
-        
-        <div class="mb-3">
-            <label for="sortCriteria" class="form-label">Sort by</label>
-            <select class="form-select" id="sortCriteria" name="SortCriteria" onchange="this.form.submit()">
-                <option value="" style="display:none"></option>
-                <option value="price">Price</option>
-                <option value="distance">Distance</option>
-                <option value="time">Time</option>
-            </select>
+
+    <div class="mb-3 d-flex justify-content-lg-start align-items-center">
+        <div class="me-3">
+            <label for="filterCompany" class="form-label">Filter by Company:</label>
+            <input type="text" class="form-control" id="filterCompany" placeholder="Enter company name" onkeyup="filterRoutes()">
         </div>
-    </form>
+        
+        <form method="get">
+            <input type="hidden" name="From" value="@Model.From" />
+            <input type="hidden" name="To" value="@Model.To" />
+            
+            <div>
+                <label for="sortCriteria" class="form-label">Sort by</label>
+                <select class="form-select" id="sortCriteria" name="SortCriteria" onchange="this.form.submit()">
+                    <option value="" style="display:none"></option>
+                    <option value="price">Price</option>
+                    <option value="distance">Distance</option>
+                    <option value="time">Time</option>
+                </select>
+            </div>
+        </form>
+    </div>
 
     <form method="post">
         <div class="mb-3">
@@ -73,17 +80,17 @@
                                             <ul class="list-group">
                                                 @foreach (var provider in leg.Providers)
                                                 {
-                                                    <li class="list-group-item">
+                                                    <li class="list-group-item provider-item" data-company="@provider.Company.Name">
                                                         <div class="d-flex justify-content-between align-items-center">
-                                                        <span>
-                                                            <input type="radio" name="SelectedProvider_@routeIndex-@legIndex" id="provider-@routeIndex-@legIndex-@provider.Company.Id" value="@provider.Company.Id">
-                                                            <label for="provider-@routeIndex-@legIndex-@provider.Company.Id">
-                                                                <strong>@provider.Company.Name</strong>
-                                                            </label>
-                                                        </span>
                                                             <span>
-                                                            <strong>Price:</strong> @provider.Price€
-                                                        </span>
+                                                                <input type="radio" name="SelectedProvider_@routeIndex-@legIndex" id="provider-@routeIndex-@legIndex-@provider.Company.Id" value="@provider.Company.Id">
+                                                                <label for="provider-@routeIndex-@legIndex-@provider.Company.Id">
+                                                                    <strong>@provider.Company.Name</strong>
+                                                                </label>
+                                                            </span>
+                                                            <span>
+                                                                <strong>Price:</strong> @provider.Price€
+                                                            </span>
                                                         </div>
                                                         <div>
                                                             Flight Start: @provider.FlightStart, Flight End: @provider.FlightEnd
