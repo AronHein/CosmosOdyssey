@@ -14,6 +14,7 @@ public class ReservationService
 
     public async Task AddReservation(Reservation reservation)
     {
+        reservation.Id = Guid.NewGuid().ToString();
         await _context.Reservations.InsertOneAsync(reservation);
     }
 

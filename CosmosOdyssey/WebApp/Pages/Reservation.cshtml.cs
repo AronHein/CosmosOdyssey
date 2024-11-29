@@ -8,10 +8,12 @@ namespace WebApp.Pages
     public class ReservationModel : PageModel
     {
         private readonly PricelistService _pricelistService;
+        private readonly ReservationService _reservationService;
 
-        public ReservationModel(PricelistService pricelistService)
+        public ReservationModel(PricelistService pricelistService, ReservationService reservationService)
         {
             _pricelistService = pricelistService;
+            _reservationService = reservationService;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -28,21 +30,50 @@ namespace WebApp.Pages
         
         [BindProperty(SupportsGet = true)]
         public string SortCriteria { get; set; }
+        
+        [BindProperty]
+        public string FirstName { get; set; }
+        
+        [BindProperty]
+        public string LastName { get; set; }
+        
+        [BindProperty]
+        public List<string> ProviderIds { get; set; }
 
         public async Task OnGet()
         {
-            if (!string.IsNullOrEmpty(From) && !string.IsNullOrEmpty(To))
-            { 
-                Pricelist = await _pricelistService.GetLatestPricelist();
-                Routes = _pricelistService.FindAllRoutes(Pricelist, From, To);
 
-                if (!string.IsNullOrEmpty(SortCriteria))
-                {
-                    SortRoutes();
-                }
+            await _pricelistService.FetchAndAddPricelistIfPriceListNew();
+            
+            Pricelist = await _pricelistService.GetLatestPricelist();
+            Routes = _pricelistService.FindAllRoutes(Pricelist, From, To);
+
+            if (!string.IsNullOrEmpty(SortCriteria))
+            {
+                SortRoutes();
             }
+            
         }
 
+        public async Task<IActionResult> OnPost()
+        {
+            List<Provider> selectedProviders = _pricelistService.FindProviders(ProviderIds);
+            List<Leg> selectedLegs = _pricelistService.FindLegsFromProviderIds(ProviderIds);
+            
+            var reservation = new Reservation
+            {
+                FirstName = FirstName,
+                LastName = LastName,
+                Routes = selectedLegs.Select(leg => leg.RouteInfo).ToList(),
+                TotalQuotedPrice = selectedProviders.Sum(p => p.Price),
+                TotalQuotedTravelTime = TimeSpan.FromMinutes(selectedProviders.Sum(p => (p.FlightEnd - p.FlightStart).TotalMinutes)),
+                Companies = selectedProviders.Select(p => p.Company.Name).ToList()
+            };
+            
+            await _reservationService.AddReservation(reservation);
+            return RedirectToPage("AllReservations");
+        }
+        
         private void SortRoutes()
         {
             if (SortCriteria == "distance")
@@ -66,11 +97,6 @@ namespace WebApp.Pages
                     }
                 }
             }
-        }
-
-        public IActionResult OnPost()
-        {
-            return RedirectToPage("AllReservations");
         }
     }
 }

@@ -15,6 +15,18 @@ public class PricelistService
         _client = client;
         _context = context;
     }
+    
+    public async Task FetchAndAddPricelistIfPriceListNew()
+    {
+        var json = await FetchPricelistJson();
+        var pricelist = DeserializePricelistJson(json);
+        var latestPricelist = await GetLatestPricelist();
+        
+        if (pricelist.Id != latestPricelist.Id)
+        {
+            await AddPricelist(pricelist);
+        }
+    }
 
     public async Task<string> FetchPricelistJson()
     {
@@ -113,5 +125,47 @@ public class PricelistService
             .Find(_ => true)
             .SortByDescending(p => p.ValidUntil)
             .FirstOrDefaultAsync();
+    }
+    
+    public List<Provider> FindProviders(List<string> providerIds)
+    {
+        List<Provider> selectedProviders = new List<Provider>();
+
+        foreach (var providerId in providerIds)
+        {
+            foreach (var pricelist in _context.Pricelists.AsQueryable())
+            {
+                foreach (var leg in pricelist.Legs)
+                {
+                    var provider = leg.Providers.FirstOrDefault(p => p.Id == providerId);
+                    if (provider != null && !selectedProviders.Contains(provider))
+                    {
+                        selectedProviders.Add(provider);
+                    }
+                }
+            }
+        }
+
+        return selectedProviders;
+    }
+    public List<Leg> FindLegsFromProviderIds(List<string> providerIds)
+    {
+        List<Leg> selectedLegs = new List<Leg>();
+
+        foreach (var providerId in providerIds)
+        {
+            foreach (var pricelist in _context.Pricelists.AsQueryable())
+            {
+                foreach (var leg in pricelist.Legs)
+                {
+                    if (leg.Providers.Any(provider => provider.Id == providerId) &&
+                        !selectedLegs.Contains(leg))
+                    {
+                        selectedLegs.Add(leg);
+                    }
+                }
+            }
+        }
+        return selectedLegs;
     }
 }
