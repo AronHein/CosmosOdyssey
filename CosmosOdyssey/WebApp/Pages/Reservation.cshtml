@@ -51,7 +51,7 @@
                                             @foreach (var provider in leg.Providers)
                                             {
                                                 <li>
-                                                    <input type="radio" name="SelectedProvider_@routeIndex-@legIndex" id="provider-@routeIndex-@legIndex-@provider.Company.Id" value="@provider.Company.Id" required>
+                                                    <input type="radio" name="SelectedProvider_@routeIndex-@legIndex" id="provider-@routeIndex-@legIndex-@provider.Company.Id" value="@provider.Company.Id">
                                                     <label for="provider-@routeIndex-@legIndex-@provider.Company.Id">
                                                         Provider: @provider.Company.Name, Price: @provider.Price<br />
                                                         Flight Start: @provider.FlightStart, Flight End: @provider.FlightEnd<br />
