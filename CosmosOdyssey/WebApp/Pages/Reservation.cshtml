@@ -45,22 +45,38 @@
                                 {
                                     var leg = route[legIndex];
                                     var flightNumber = legIndex + 1;
-                                    <li class="list-group-item">
-                                        Flight @flightNumber: From @leg.RouteInfo.From.Name to @leg.RouteInfo.To.Name, Distance: @leg.RouteInfo.Distance km
-                                        <ul class="list-unstyled mt-2">
-                                            @foreach (var provider in leg.Providers)
-                                            {
-                                                <li>
-                                                    <input type="radio" name="SelectedProvider_@routeIndex-@legIndex" id="provider-@routeIndex-@legIndex-@provider.Company.Id" value="@provider.Company.Id">
-                                                    <label for="provider-@routeIndex-@legIndex-@provider.Company.Id">
-                                                        Provider: @provider.Company.Name, Price: @provider.Price<br />
-                                                        Flight Start: @provider.FlightStart, Flight End: @provider.FlightEnd<br />
-                                                        Duration: @(provider.FlightEnd - provider.FlightStart)
-                                                    </label>
-                                                </li>
-                                            }
-                                        </ul>
-                                    </li>
+                                    <div class="card mb-2" id="flightCard-@routeIndex-@legIndex">
+                                        <div class="card-header" onclick="toggleCard('flightCardBody-@routeIndex-@legIndex', 'flightIndicator-@routeIndex-@legIndex')">
+                                            Flight @flightNumber: From @leg.RouteInfo.From.Name to @leg.RouteInfo.To.Name, Distance: @leg.RouteInfo.Distance km
+                                            <span class="collapse-indicator" id="flightIndicator-@routeIndex-@legIndex">
+                                                <i class="fas fa-chevron-down"></i>
+                                            </span>
+                                        </div>
+                                        <div class="card-body" id="flightCardBody-@routeIndex-@legIndex">
+                                            <ul class="list-group">
+                                                @foreach (var provider in leg.Providers)
+                                                {
+                                                    <li class="list-group-item">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                        <span>
+                                                            <input type="radio" name="SelectedProvider_@routeIndex-@legIndex" id="provider-@routeIndex-@legIndex-@provider.Company.Id" value="@provider.Company.Id">
+                                                            <label for="provider-@routeIndex-@legIndex-@provider.Company.Id">
+                                                                <strong>@provider.Company.Name</strong>
+                                                            </label>
+                                                        </span>
+                                                            <span>
+                                                            <strong>Price:</strong> @provider.Price€
+                                                        </span>
+                                                        </div>
+                                                        <div>
+                                                            Flight Start: @provider.FlightStart, Flight End: @provider.FlightEnd<br />
+                                                            Duration: @(provider.FlightEnd - provider.FlightStart)
+                                                        </div>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
                                 }
                             </ul>
                             <div class="mt-3">
