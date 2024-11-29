@@ -39,24 +39,36 @@ namespace WebApp.Pages
         
         [BindProperty]
         public List<string> ProviderIds { get; set; }
+        
+        [BindProperty] 
+        public string ErrorMessage { get; set; }
 
         public async Task OnGet()
         {
-
-            await _pricelistService.FetchAndAddPricelistIfPriceListNew();
-            
-            Pricelist = await _pricelistService.GetLatestPricelist();
-            Routes = _pricelistService.FindAllRoutes(Pricelist, From, To);
+            await UpdatePricelistAndRoutes();
 
             if (!string.IsNullOrEmpty(SortCriteria))
             {
                 SortRoutes();
             }
-            
         }
 
         public async Task<IActionResult> OnPost()
         {
+            if (string.IsNullOrEmpty(FirstName))
+            {
+                await UpdatePricelistAndRoutes();
+                ErrorMessage = "Please enter your first name.";
+                return Page();
+            }
+            if (string.IsNullOrEmpty(LastName))
+            {
+                await UpdatePricelistAndRoutes();
+                ErrorMessage = "Please enter your last name.";
+                return Page();
+            }
+            
+            
             List<Provider> selectedProviders = _pricelistService.FindProviders(ProviderIds);
             List<Leg> selectedLegs = _pricelistService.FindLegsFromProviderIds(ProviderIds);
             
@@ -97,6 +109,14 @@ namespace WebApp.Pages
                     }
                 }
             }
+        }
+        
+        private async Task UpdatePricelistAndRoutes()
+        {
+            await _pricelistService.FetchAndAddPricelistIfPriceListNew();
+            
+            Pricelist = await _pricelistService.GetLatestPricelist();
+            Routes = _pricelistService.FindAllRoutes(Pricelist, From, To);
         }
     }
 }
