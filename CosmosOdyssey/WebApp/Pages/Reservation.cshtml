@@ -9,6 +9,22 @@
 <div class="container mt-5">
     <h1>Routes from @Model.From to @Model.To</h1>
     <p>Price list valid until: @Model.Pricelist.ValidUntil</p>
+    
+    <form method="get">
+
+        <input type="hidden" name="From" value="@Model.From" />
+        <input type="hidden" name="To" value="@Model.To" />
+        
+        <div class="mb-3">
+            <label for="sortCriteria" class="form-label">Sort by</label>
+            <select class="form-select" id="sortCriteria" name="SortCriteria" onchange="this.form.submit()">
+                <option value="" style="display:none"></option>
+                <option value="price">Price</option>
+                <option value="distance">Distance</option>
+                <option value="time">Time</option>
+            </select>
+        </div>
+    </form>
 
     <form method="post">
         <div class="mb-3">
@@ -20,6 +36,7 @@
             <label for="LastName" class="form-label">Last Name</label>
             <input type="text" class="form-control" id="LastName" name="LastName" required>
         </div>
+        
 
         @if (Model.Routes.Count > 0)
         {
@@ -34,7 +51,7 @@
                     }
                     <div class="card" id="routeCard-@routeIndex">
                         <div class="card-header" onclick="toggleCard('routeCardBody-@routeIndex', 'indicator-@routeIndex')">
-                            Route: @routeInfo
+                            Route: @routeInfo, Total Distance: @route.Sum(leg => leg.RouteInfo.Distance) km
                             <span class="collapse-indicator" id="indicator-@routeIndex">
                                 <i class="fas fa-chevron-down"></i>
                             </span>
@@ -69,8 +86,7 @@
                                                         </span>
                                                         </div>
                                                         <div>
-                                                            Flight Start: @provider.FlightStart, Flight End: @provider.FlightEnd<br />
-                                                            Duration: @(provider.FlightEnd - provider.FlightStart)
+                                                            Flight Start: @provider.FlightStart, Flight End: @provider.FlightEnd
                                                         </div>
                                                     </li>
                                                 }

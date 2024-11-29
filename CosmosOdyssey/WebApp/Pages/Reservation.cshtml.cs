@@ -25,9 +25,9 @@ namespace WebApp.Pages
         
         [BindProperty]
         public List<List<Leg>> Routes { get; set; }
-
-        [BindProperty]
-        public string SelectedFlight { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public string SortCriteria { get; set; }
 
         public async Task OnGet()
         {
@@ -35,6 +35,36 @@ namespace WebApp.Pages
             { 
                 Pricelist = await _pricelistService.GetLatestPricelist();
                 Routes = _pricelistService.FindAllRoutes(Pricelist, From, To);
+
+                if (!string.IsNullOrEmpty(SortCriteria))
+                {
+                    SortRoutes();
+                }
+            }
+        }
+
+        private void SortRoutes()
+        {
+            if (SortCriteria == "distance")
+            {
+                Routes = Routes.OrderBy(r => r.Sum(leg => leg.RouteInfo.Distance)).ToList();
+            }
+                
+            foreach (var route in Routes)
+            {
+                foreach (var leg in route)
+                {
+                    if (SortCriteria == "price")
+                    {
+                        leg.Providers.Sort((provider1, provider2) =>
+                            provider1.Price.CompareTo(provider2.Price));
+                    }
+                    else if (SortCriteria == "time")
+                    {
+                        leg.Providers.Sort((provider1, provider2) =>
+                            provider1.FlightStart.CompareTo(provider2.FlightStart));
+                    }
+                }
             }
         }
 
