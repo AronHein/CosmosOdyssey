@@ -61,6 +61,8 @@ public class PricelistService
     public async Task AddPricelist(Pricelist pricelist)
     {
         await DeleteOldestPricelistIfOverLimit(15);
+        
+        await DeleteDatedReservations();
 
         await _context.Pricelists.InsertOneAsync(pricelist);
     }
@@ -185,6 +187,21 @@ public class PricelistService
             if (oldestPricelist != null)
             {
                 await _context.Pricelists.DeleteOneAsync(p => p.Id == oldestPricelist.Id);
+            }
+        }
+    }
+    
+    private async Task DeleteDatedReservations()
+    {
+        var reservations = await _context.Reservations.Find(_ => true).ToListAsync();
+        var pricelists = await GetPricelists();
+        var pricelistIds = pricelists.Select(p => p.Id).ToList();
+        
+        foreach (var reservation in reservations)
+        {
+            if (!pricelistIds.Contains(reservation.PricelistId))
+            {
+                await _context.Reservations.DeleteOneAsync(r => r.Id == reservation.Id);
             }
         }
     }
