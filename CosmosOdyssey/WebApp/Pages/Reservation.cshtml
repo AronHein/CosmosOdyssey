@@ -8,7 +8,7 @@
 <body>
 <div class="container mt-5">
     <h1>Routes from @Model.From to @Model.To</h1>
-    <p>Price list valid until: @Model.Pricelist.ValidUntil</p>
+    <p>Price list valid until: @Model.Pricelist.ValidUntil.ToLocalTime()</p>
 
     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
     {
@@ -99,7 +99,7 @@
                                                             </span>
                                                         </div>
                                                         <div>
-                                                            Flight Start: @provider.FlightStart, Flight End: @provider.FlightEnd
+                                                            Flight Start: @provider.FlightStart.ToLocalTime(), Flight End: @provider.FlightEnd.ToLocalTime()
                                                         </div>
                                                     </li>
                                                 }
