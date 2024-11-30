@@ -40,15 +40,17 @@
     </div>
 
     <form method="post">
-        <div class="mb-3">
-            <label for="FirstName" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="FirstName" name="FirstName" value="@Model.FirstName">
+        <div class="mb-3 d-flex justify-content-lg-start align-items-center">
+            <div class="me-3">
+                <label for="FirstName" class="form-label">First Name</label>
+                <input type="text" class="form-control w-auto" id="FirstName" name="FirstName" value="@Model.FirstName">
+            </div>
+            <div>
+                <label for="LastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control w-auto" id="LastName" name="LastName" value="@Model.LastName">
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label for="LastName" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="LastName" name="LastName" value="@Model.LastName">
-        </div>
 
         @if (Model.Routes.Count > 0)
         {
