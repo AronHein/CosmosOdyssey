@@ -13,7 +13,6 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th>Reservation ID</th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Route</th>
@@ -23,22 +22,14 @@
             </tr>
             </thead>
             <tbody>
-
             @foreach (var reservation in Model.Reservations)
             {
-                var routes = reservation.Routes;
-                var fullRoute = routes.First().From.Name;
-                foreach (var routeInfo in routes)
-                {
-                    fullRoute += " -> " + routeInfo.To.Name;
-                }
                 <tr>
-                    <td>@reservation.Id</td>
                     <td>@reservation.FirstName</td>
                     <td>@reservation.LastName</td>
-                    <td>@fullRoute</td>
-                    <td>@reservation.TotalQuotedPrice</td>
-                    <td>@reservation.TotalQuotedTravelTime</td>
+                    <td>@AllReservationsModel.FormatRoute(reservation.Routes)</td>
+                    <td>@double.Round(reservation.TotalQuotedPrice, 2)</td>
+                    <td>@AllReservationsModel.FormatTimeSpan(reservation.TotalQuotedTravelTime)</td>
                     <td>@string.Join(", ", reservation.Companies)</td>
                 </tr>
             }
