@@ -60,6 +60,8 @@ public class PricelistService
     
     public async Task AddPricelist(Pricelist pricelist)
     {
+        await DeleteOldestPricelistIfOverLimit(15);
+
         await _context.Pricelists.InsertOneAsync(pricelist);
     }
 
@@ -167,5 +169,23 @@ public class PricelistService
             }
         }
         return selectedLegs;
+    }
+    
+    private async Task DeleteOldestPricelistIfOverLimit(int limit)
+    {
+        var count = await _context.Pricelists.CountDocumentsAsync(_ => true);
+
+        if (count >= limit)
+        {
+            var oldestPricelist = await _context.Pricelists
+                .Find(_ => true)
+                .SortBy(p => p.ValidUntil)
+                .FirstOrDefaultAsync();
+
+            if (oldestPricelist != null)
+            {
+                await _context.Pricelists.DeleteOneAsync(p => p.Id == oldestPricelist.Id);
+            }
+        }
     }
 }
