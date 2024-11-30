@@ -6,7 +6,7 @@ public static class Formatter
 {
     public static string FormatTimeSpan(TimeSpan timeSpan)
     {
-        string formattedTime = "";
+        var formattedTime = "";
 
         if (timeSpan.Days > 0)
             formattedTime += $"{timeSpan.Days} day{(timeSpan.Days > 1 ? "s" : "")}";
