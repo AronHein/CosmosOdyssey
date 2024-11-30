@@ -18,8 +18,8 @@ public class IndexModel : PageModel
     [BindProperty] public string From { get; set; } = default!;
 
     [BindProperty] public string To { get; set; } = default!;
-    [BindProperty] public List<string> Locations { get; set; }
-    [BindProperty] public string ErrorMessage { get; set; }
+    [BindProperty] public List<string> Locations { get; set; } = default!;
+    [BindProperty] public string ErrorMessage { get; set; } = default!;
 
     public async Task<IActionResult> OnPost()
     {

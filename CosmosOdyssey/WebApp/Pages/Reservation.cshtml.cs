@@ -17,31 +17,31 @@ namespace WebApp.Pages
         }
 
         [BindProperty(SupportsGet = true)]
-        public string From { get; set; }
+        public string From { get; set; } = default!;
 
         [BindProperty(SupportsGet = true)]
-        public string To { get; set; }
+        public string To { get; set; } = default!;
         
         [BindProperty(SupportsGet = true)]
-        public Pricelist Pricelist { get; set; }
+        public Pricelist Pricelist { get; set; } = default!;
         
         [BindProperty]
-        public List<List<Leg>> Routes { get; set; }
+        public List<List<Leg>> Routes { get; set; } = default!;
         
         [BindProperty(SupportsGet = true)]
-        public string SortCriteria { get; set; }
+        public string SortCriteria { get; set; } = default!;
         
         [BindProperty]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = default!;
         
         [BindProperty]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = default!;
         
         [BindProperty]
-        public List<string> ProviderIds { get; set; }
+        public List<string> ProviderIds { get; set; } = default!;
         
         [BindProperty] 
-        public string ErrorMessage { get; set; }
+        public string ErrorMessage { get; set; } = default!;
 
         public async Task OnGet()
         {
