@@ -47,10 +47,11 @@ namespace WebApp.Pages
         {
             await UpdatePricelistAndRoutes();
 
-            if (!string.IsNullOrEmpty(SortCriteria))
+            if (string.IsNullOrEmpty(SortCriteria))
             {
-                SortRoutes();
+                SortCriteria = "time";
             }
+            SortRoutes();
         }
 
         public async Task<IActionResult> OnPost()
@@ -74,8 +75,13 @@ namespace WebApp.Pages
             
             if (!IsValidRoute(selectedLegs))
             {
-                await UpdatePricelistAndRoutes();
                 ErrorMessage = "Invalid selection: Please select exactly one flight for each leg of a single route.";
+                return Page();
+            }
+
+            if (IsFlightTimesOverlapping(selectedProviders))
+            {
+                ErrorMessage = "Invalid selection: Flight times are overlapping.";
                 return Page();
             }
             
@@ -93,7 +99,7 @@ namespace WebApp.Pages
             await _reservationService.AddReservation(reservation);
             return RedirectToPage("AllReservations");
         }
-        
+
         private void SortRoutes()
         {
             if (SortCriteria == "distance")
@@ -159,6 +165,23 @@ namespace WebApp.Pages
             }
 
             return true;
+        }
+        private bool IsFlightTimesOverlapping(List<Provider> selectedProviders)
+        {
+            var selectedProvidersCount = selectedProviders.Count;
+            
+            for (int i = 0; i < selectedProvidersCount; i++)
+            {
+                for (int j = i + 1; j < selectedProvidersCount; j++)
+                {
+                    if (selectedProviders[i].FlightStart < selectedProviders[j].FlightEnd &&
+                        selectedProviders[j].FlightStart < selectedProviders[i].FlightEnd)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }
