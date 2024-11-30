@@ -68,8 +68,14 @@ namespace WebApp.Pages
                 ErrorMessage = "Please enter your last name.";
                 return Page();
             }
-            
-            
+
+            if (IsPricelistExpired())
+            {
+                ErrorMessage = "Pricelist hass expired. Please make a new reservation.";
+                return Page();
+            }
+
+
             List<Provider> selectedProviders = _pricelistService.FindProviders(ProviderIds);
             List<Leg> selectedLegs = _pricelistService.FindLegsFromProviderIds(ProviderIds);
             
@@ -182,6 +188,11 @@ namespace WebApp.Pages
                 }
             }
             return false;
+        }
+        
+        private bool IsPricelistExpired()
+        {
+            return (Pricelist.ValidUntil.ToLocalTime() < DateTime.Now.ToLocalTime());
         }
     }
 }
