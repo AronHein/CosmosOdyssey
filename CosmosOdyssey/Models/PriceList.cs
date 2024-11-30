@@ -2,7 +2,7 @@
 
 public class Pricelist
 {
-    public string Id { get; set; }
-    public DateTime ValidUntil { get; set; }
-    public List<Leg> Legs { get; set; }
+    public string Id { get; set; } = default!;
+    public DateTime ValidUntil { get; set; } = default!;
+    public List<Leg> Legs { get; set; } = default!;
 }
