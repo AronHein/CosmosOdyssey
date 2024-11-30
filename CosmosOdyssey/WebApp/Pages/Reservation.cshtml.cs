@@ -55,15 +55,15 @@ namespace WebApp.Pages
 
         public async Task<IActionResult> OnPost()
         {
+            await UpdatePricelistAndRoutes();
+            
             if (string.IsNullOrEmpty(FirstName))
             {
-                await UpdatePricelistAndRoutes();
                 ErrorMessage = "Please enter your first name.";
                 return Page();
             }
             if (string.IsNullOrEmpty(LastName))
             {
-                await UpdatePricelistAndRoutes();
                 ErrorMessage = "Please enter your last name.";
                 return Page();
             }
@@ -72,8 +72,16 @@ namespace WebApp.Pages
             List<Provider> selectedProviders = _pricelistService.FindProviders(ProviderIds);
             List<Leg> selectedLegs = _pricelistService.FindLegsFromProviderIds(ProviderIds);
             
+            if (!IsValidRoute(selectedLegs))
+            {
+                await UpdatePricelistAndRoutes();
+                ErrorMessage = "Invalid selection: Please select exactly one flight for each leg of a single route.";
+                return Page();
+            }
+            
             var reservation = new Reservation
             {
+                PricelistId = Pricelist.Id,
                 FirstName = FirstName,
                 LastName = LastName,
                 Routes = selectedLegs.Select(leg => leg.RouteInfo).ToList(),
@@ -117,6 +125,40 @@ namespace WebApp.Pages
             
             Pricelist = await _pricelistService.GetLatestPricelist();
             Routes = _pricelistService.FindAllRoutes(Pricelist, From, To);
+        }
+        
+        private bool IsValidRoute(List<Leg> selectedLegs)
+        {
+            var selectedRoute = selectedLegs.Select(leg => leg.RouteInfo).ToList();
+
+            foreach (var route in Routes)
+            {
+                if (RouteMatches(route, selectedRoute))
+                {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+
+        private bool RouteMatches(List<Leg> route, List<RouteInfo> selectedRoute)
+        {
+            if (route.Count != selectedRoute.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < route.Count; i++)
+            {
+                if (route[i].RouteInfo.From.Name != selectedRoute[i].From.Name ||
+                    route[i].RouteInfo.To.Name != selectedRoute[i].To.Name)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
