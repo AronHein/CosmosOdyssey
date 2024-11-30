@@ -58,15 +58,10 @@
                 @for (int routeIndex = 0; routeIndex < Model.Routes.Count; routeIndex++)
                 {
                     var route = Model.Routes[routeIndex];
-                    var routeInfo = route.First().RouteInfo.From.Name;
-                    foreach (var leg in route)
-                    {
-                        routeInfo += " -> " + leg.RouteInfo.To.Name;
-                    }
 
                     <div class="card" id="routeCard-@routeIndex">
                         <div class="card-header" onclick="toggleCard('routeCardBody-@routeIndex', 'indicator-@routeIndex')">
-                            Route: @routeInfo, Total Distance: @route.Sum(leg => leg.RouteInfo.Distance) km
+                            Route: @Utils.Formatter.FormatRoute(route), Total Distance: @route.Sum(leg => leg.RouteInfo.Distance) km
                             <span class="collapse-indicator" id="indicator-@routeIndex">
                                 <i class="fas fa-chevron-down"></i>
                             </span>

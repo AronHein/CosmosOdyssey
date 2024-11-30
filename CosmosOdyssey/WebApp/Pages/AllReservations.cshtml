@@ -7,7 +7,7 @@
 <body>
 <div class="container mt-5">
     <h1 class="mb-3">All Reservations</h1>
-
+    
     @if (Model.Reservations.Count > 0)
     {
         <table class="table table-striped">
@@ -27,9 +27,9 @@
                 <tr>
                     <td>@reservation.FirstName</td>
                     <td>@reservation.LastName</td>
-                    <td>@AllReservationsModel.FormatRoute(reservation.Routes)</td>
+                    <td>@Utils.Formatter.FormatRoute(reservation.Routes)</td>
                     <td>@double.Round(reservation.TotalQuotedPrice, 2)€</td>
-                    <td>@AllReservationsModel.FormatTimeSpan(reservation.TotalQuotedTravelTime)</td>
+                    <td>@Utils.Formatter.FormatTimeSpan(reservation.TotalQuotedTravelTime)</td>
                     <td>@string.Join(", ", reservation.Companies)</td>
                 </tr>
             }
