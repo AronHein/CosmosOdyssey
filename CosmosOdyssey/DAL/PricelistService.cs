@@ -107,21 +107,6 @@ public class PricelistService
 
         return routes;
     }
-    
-    public List<Dictionary<string, string>> GetRouteNamesFromRoutesList(List<List<Leg>> routes)
-    {
-        var routeNames = new List<Dictionary<string, string>>();
-        foreach (var route in routes)
-        {
-            var routeName = new Dictionary<string, string>();
-            foreach (var leg in route)
-            {
-                routeName.Add(leg.RouteInfo.From.Name, leg.RouteInfo.To.Name);
-            }
-            routeNames.Add(routeName);
-        }
-        return routeNames;
-    }
 
     public async Task<Pricelist> GetLatestPricelist()
     {
