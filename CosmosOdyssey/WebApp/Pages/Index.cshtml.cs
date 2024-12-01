@@ -6,20 +6,24 @@ namespace WebApp.Pages;
 
 public class IndexModel : PageModel
 {
-    private readonly ILogger<IndexModel> _logger;
     private readonly PricelistService _pricelistService;
 
-    public IndexModel(ILogger<IndexModel> logger, PricelistService pricelistService)
+    public IndexModel(PricelistService pricelistService)
     {
-        _logger = logger;
         _pricelistService = pricelistService;
     }
 
-    [BindProperty] public string From { get; set; } = default!;
+    [BindProperty] 
+    public string From { get; set; } = default!;
 
-    [BindProperty] public string To { get; set; } = default!;
-    [BindProperty] public List<string> Locations { get; set; } = default!;
-    [BindProperty] public string ErrorMessage { get; set; } = default!;
+    [BindProperty] 
+    public string To { get; set; } = default!;
+    
+    [BindProperty] 
+    public List<string> Locations { get; set; } = default!;
+    
+    [BindProperty] 
+    public string ErrorMessage { get; set; } = default!;
 
     public async Task<IActionResult> OnPost()
     {
@@ -29,7 +33,6 @@ public class IndexModel : PageModel
         {
             ErrorMessage = "The 'From' and 'To' locations cannot be the same.";
             return Page();
-
         }
         
         return RedirectToPage("Reservation", new { From, To });
