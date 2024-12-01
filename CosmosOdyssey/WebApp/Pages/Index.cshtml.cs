@@ -45,6 +45,7 @@ public class IndexModel : PageModel
 
     private async Task PopulateLocations()
     {
+        await _pricelistService.FetchAndAddPricelistIfPriceListNew();
         var pricelist = await _pricelistService.GetLatestPricelist();
         Locations = pricelist.Legs.Select(l => l.RouteInfo.From.Name).Distinct().ToList();
     }

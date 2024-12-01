@@ -22,7 +22,7 @@ public class PricelistService
         var pricelist = DeserializePricelistJson(json);
         var latestPricelist = await GetLatestPricelist();
         
-        if (pricelist.Id != latestPricelist.Id)
+        if (latestPricelist == null || pricelist.Id != latestPricelist.Id)
         {
             await AddPricelist(pricelist);
         }
