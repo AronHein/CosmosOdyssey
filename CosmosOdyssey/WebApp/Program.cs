@@ -6,10 +6,12 @@ builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
 
 builder.Configuration.AddEnvironmentVariables();
-var connectionString = builder.Configuration.GetConnectionString("MongoDb") ??
-                       throw new InvalidOperationException("Connection string 'MongoDb' not found.");
-var databaseName = builder.Configuration["DatabaseName"] ??
-                   throw new InvalidOperationException("In configuration string 'DatabaseName' not found.");
+var connectionString = builder.Configuration["MONGODB_CONNECTION_STRING"] ??
+                       builder.Configuration.GetConnectionString("MongoDb") ??
+                       throw new InvalidOperationException("Connection string 'MONGODB_CONNECTION_STRING' not found.");
+var databaseName = builder.Configuration["MONGODB_DATABASE_NAME"] ??
+                   builder.Configuration["DatabaseName"] ??
+                   throw new InvalidOperationException("Database name 'MONGODB_DATABASE_NAME' not found.");
 
 builder.Services.AddSingleton(new MongoDbContext(connectionString, databaseName));
 builder.Services.AddSingleton<PricelistService>();
