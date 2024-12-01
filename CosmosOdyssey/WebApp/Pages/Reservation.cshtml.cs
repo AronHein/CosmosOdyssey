@@ -71,7 +71,7 @@ namespace WebApp.Pages
 
             if (IsPricelistExpired())
             {
-                ErrorMessage = "Pricelist hass expired. Please make a new reservation.";
+                ErrorMessage = "Pricelist has expired. Please make a new reservation.";
                 return Page();
             }
 
