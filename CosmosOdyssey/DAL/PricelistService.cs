@@ -72,12 +72,13 @@ public class PricelistService
         return await _context.Pricelists.Find(_ => true).ToListAsync();
     }
     
-    // Depth-first search algorithm to find all possible routes from one location to another.
+    // Depth-first search algorithm to find all possible routes from one location to another in pricelist.
     public List<List<Leg>> FindAllRoutes(Pricelist pricelist, string from, string to)
     {
         var routes = new List<List<Leg>>();
         var legs = pricelist.Legs;
-
+        
+        // Helper method to perform DFS.
         void Search(List<Leg> currentRoute, string currentLocation)
         {
             if (currentLocation == to)
