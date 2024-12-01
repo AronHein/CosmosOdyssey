@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
 
+builder.Configuration.AddEnvironmentVariables();
 var connectionString = builder.Configuration.GetConnectionString("MongoDb") ??
                        throw new InvalidOperationException("Connection string 'MongoDb' not found.");
 var databaseName = builder.Configuration["DatabaseName"] ??
